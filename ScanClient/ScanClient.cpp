@@ -14,20 +14,6 @@ int main()
 {
 	auto pLogger = CreateConsoleLogger();
 
-	CString str("Debug");
-	pLogger->Debug(str);
-	str = "Information";
-	pLogger->Info(str);
-	str = "Warning";
-	pLogger->Warn(str);
-	str = "Error";
-	pLogger->Error(str);
-
-	TScanResult* pScanResult;
-	size_t count = 0;
-	HRESULT res = ScanFile(L"C:\\MyProjects\\DELETE\\Comodo\\debug\\virus.dll", &pScanResult, count);
-	res = ScanFile(L"C:\\MyProjects\\DELETE\\Comodo\\debug\\1sec.bin", &pScanResult, count);
-
 	auto pQueue = std::shared_ptr<CFilesQueue>(new CFilesQueue());
 	auto pReader = CAutoPtr<CDirReader>(new CDirReader(pQueue));
 	pReader->ReadDir(L"C:\\MyProjects\\DELETE\\Comodo\\");
@@ -45,8 +31,10 @@ int main()
 	filesScanner.Stop();
 	pQueue->Stop();
 
+
 	_CrtDumpMemoryLeaks();
-    return 0;
+
+	return 0;
 }
 
 int GetProcCnt()

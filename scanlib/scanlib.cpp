@@ -8,6 +8,8 @@
 
 SCANLIB_API CAtlArray<TMalware> g_Malwares;
 
+void str2byte(const CString& data, unsigned char** pOut);
+
 SCANLIB_API HRESULT ScanFile(const wchar_t * lpwszPath, TScanResult** ppMalwares, size_t& count)
 {
 	CAtlFile file;
@@ -74,7 +76,67 @@ SCANLIB_API HRESULT ScanArray(const unsigned char * lpArray, const unsigned long
 	return S_OK;
 }
 
-SCANLIB_API HRESULT GetFileSignature(const wchar_t * lpwszPath, CAtlArray<CString>& malwares)
+SCANLIB_API HRESULT LoadSignatures(const wchar_t* lpwszPath)
 {
-	return E_NOTIMPL;
+	CAtlFile dbFile;
+
+	HRESULT hr = dbFile.Create(lpwszPath,
+		GENERIC_READ,
+		0,
+		OPEN_EXISTING);
+
+	if (hr != S_OK)
+		return hr;
+
+	CString dbContent;
+	ULONGLONG ullDbSize = 0;
+	dbFile.GetSize(ullDbSize);
+	char* pBuff = new char[(int)ullDbSize + 1];
+	DWORD nByteRead = 0;
+	dbFile.Read(pBuff, (DWORD)ullDbSize, nByteRead);
+	pBuff[nByteRead] = 0;
+	dbContent = CA2T(pBuff);
+	delete[] pBuff;
+	dbFile.Close();
+
+	g_Malwares.RemoveAll();
+
+	int nLinePos = 0;
+	CString sLine = dbContent.Tokenize(L"\r\n", nLinePos);
+	while (sLine.IsEmpty() == false)
+	{
+		int nDotPos = 0;
+		CString sDef = sLine.Tokenize(L".", nDotPos);
+		while (sDef.IsEmpty() == false)
+		{
+			TMalware malware;
+			malware.HexString = sDef;
+			str2byte(sDef, &malware.HexData);
+			malware.DataLen = sDef.GetLength() / 2;
+			sDef = sLine.Tokenize(L".", nDotPos);
+			malware.GUID = sDef;
+
+			g_Malwares.Add(malware);
+			break;
+		}
+		sLine = dbContent.Tokenize(L"\r\n", nLinePos);
+	}
+
+	return S_OK;
+}
+
+void str2byte(const CString& data, unsigned char** pOut)
+{
+	*pOut = new unsigned char[data.GetLength() / 2];
+	unsigned char* p = *pOut;
+
+	wchar_t b[3];
+	b[2] = 0;
+
+	for (auto s = (wchar_t*)data.GetString(); *s; s += 2)
+	{
+		memcpy(b, s, 4);
+		*p = (unsigned char)wcstoul(b, nullptr, 16);
+		p++;
+	}
 }
