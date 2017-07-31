@@ -42,6 +42,7 @@ STDMETHODIMP CScanner::ScanArray(VARIANT pData, long* lOffset, BSTR* lpwszGUID)
 		bstrGuid.CopyTo(lpwszGUID);
 		delete[] pGuid;
 	}
+	SafeArrayUnaccessData(pSa);
 	pSa.Detach();
 
 	return hr;

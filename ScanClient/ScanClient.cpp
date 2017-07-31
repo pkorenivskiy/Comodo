@@ -27,7 +27,7 @@ int wmain(int argc, wchar_t *argv[])
 	pReader->ReadDir(argv[1]);
 
 	// pure dll
-	/*LoadSignatures(L"db.txt");
+	/*scandll::LoadSignatures(L"db.txt");
 	CFilesScanner filesScanner(GetProcCnt(), pQueue, pLogger);*/
 
 	// com server
@@ -42,7 +42,7 @@ int wmain(int argc, wchar_t *argv[])
 	::CloseHandle(hFake);
 
 	pQueue->Stop();
-	filesScanner.Stop();		
+	filesScanner.Stop();
 
 	_CrtDumpMemoryLeaks();
 
