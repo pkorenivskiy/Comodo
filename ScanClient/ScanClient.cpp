@@ -26,9 +26,11 @@ int wmain(int argc, wchar_t *argv[])
 	auto pReader = CAutoPtr<CDirReader>(new CDirReader(pQueue));
 	pReader->ReadDir(argv[1]);
 
+	// pure dll
 	/*LoadSignatures(L"db.txt");
 	CFilesScanner filesScanner(GetProcCnt(), pQueue, pLogger);*/
 
+	// com server
 	CComFilesScanner filesScanner(GetProcCnt(), pQueue, pLogger, argv[2]);
 
 	HANDLE hFake = ::CreateEvent(NULL, TRUE, FALSE, NULL);
