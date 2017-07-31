@@ -1,0 +1,81 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 14.10.25019.0 (ba0cd155).
+//
+// c:\myprojects\delete\comodo\scanclient\debug\scansrv.tlh
+//
+// C++ source equivalent of Win32 type library c:/myprojects/delete/comodo/debug/ScanSrv.Dll
+// compiler-generated file created 07/31/17 at 05:11:10 - DO NOT EDIT!
+
+#pragma once
+#pragma pack(push, 8)
+
+#include <comdef.h>
+
+namespace ScanSrvLib {
+
+//
+// Forward references and typedefs
+//
+
+struct __declspec(uuid("198ccb41-c115-45d5-9359-440b19e36c85"))
+/* LIBID */ __ScanSrvLib;
+struct /* coclass */ Scanner;
+struct __declspec(uuid("16ba5b1a-00db-411d-82c8-18c2c75869c9"))
+/* dual interface */ IScanner;
+
+//
+// Smart pointer typedef declarations
+//
+
+_COM_SMARTPTR_TYPEDEF(IScanner, __uuidof(IScanner));
+
+//
+// Type library items
+//
+
+struct __declspec(uuid("b596f2bc-df22-40a9-a44c-8c8210b1f6c8"))
+Scanner;
+    // [ default ] interface IScanner
+
+struct __declspec(uuid("16ba5b1a-00db-411d-82c8-18c2c75869c9"))
+IScanner : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    HRESULT ScanFile (
+        _bstr_t lpwszPath,
+        long * lOffset,
+        BSTR * lpwszGUID );
+    HRESULT ScanArray (
+        const _variant_t & pData,
+        long * lOffset,
+        BSTR * lpwszGUID );
+    HRESULT LoadSignatures (
+        _bstr_t lpwszPath );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_ScanFile (
+        /*[in]*/ BSTR lpwszPath,
+        /*[out]*/ long * lOffset,
+        /*[out]*/ BSTR * lpwszGUID ) = 0;
+      virtual HRESULT __stdcall raw_ScanArray (
+        /*[in]*/ VARIANT pData,
+        /*[out]*/ long * lOffset,
+        /*[out]*/ BSTR * lpwszGUID ) = 0;
+      virtual HRESULT __stdcall raw_LoadSignatures (
+        /*[in]*/ BSTR lpwszPath ) = 0;
+};
+
+//
+// Wrapper method implementations
+//
+
+#include "scansrv.tli"
+
+} // namespace ScanSrvLib
+
+#pragma pack(pop)

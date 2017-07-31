@@ -1,0 +1,30 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 14.10.25019.0 (ba0cd155).
+//
+// c:\myprojects\delete\comodo\scanclient\debug\scansrv.tli
+//
+// Wrapper implementations for Win32 type library c:/myprojects/delete/comodo/debug/ScanSrv.Dll
+// compiler-generated file created 07/31/17 at 05:11:10 - DO NOT EDIT!
+
+#pragma once
+
+//
+// interface IScanner wrapper method implementations
+//
+
+inline HRESULT IScanner::ScanFile ( _bstr_t lpwszPath, long * lOffset, BSTR * lpwszGUID ) {
+    HRESULT _hr = raw_ScanFile(lpwszPath, lOffset, lpwszGUID);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IScanner::ScanArray ( const _variant_t & pData, long * lOffset, BSTR * lpwszGUID ) {
+    HRESULT _hr = raw_ScanArray(pData, lOffset, lpwszGUID);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IScanner::LoadSignatures ( _bstr_t lpwszPath ) {
+    HRESULT _hr = raw_LoadSignatures(lpwszPath);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
