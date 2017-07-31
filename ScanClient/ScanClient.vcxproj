@@ -91,6 +91,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -136,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\TSQueue.h" />
+    <ClInclude Include="ComFilesScanner.h" />
     <ClInclude Include="DirReader.h" />
     <ClInclude Include="FilesQueue.h" />
     <ClInclude Include="FilesScanner.h" />
@@ -143,6 +145,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ComFilesScanner.cpp" />
     <ClCompile Include="DirReader.cpp" />
     <ClCompile Include="FilesQueue.cpp" />
     <ClCompile Include="FilesScanner.cpp" />
@@ -161,6 +164,10 @@
     <ProjectReference Include="..\scanlib\scanlib.vcxproj">
       <Project>{5fecfed8-f052-4e03-9edf-3d520d8c7ce8}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scansrv.tlh" />
+    <None Include="scansrv.tli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

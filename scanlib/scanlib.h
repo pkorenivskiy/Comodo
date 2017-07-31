@@ -10,8 +10,11 @@
 #define SCANLIB_API __declspec(dllimport)
 #endif
 
-extern SCANLIB_API CAtlArray<TMalware> g_Malwares;
+namespace scandll
+{
+	extern SCANLIB_API CAtlArray<TMalware> g_Malwares;
 
-SCANLIB_API HRESULT ScanFile(const wchar_t* lpwszPath, TScanResult** ppMalwares, size_t& count);
-SCANLIB_API HRESULT ScanArray(const unsigned char* lpArray, const unsigned long nLength, TScanResult** ppMalwares, size_t& count);
-SCANLIB_API HRESULT LoadSignatures(const wchar_t* lpwszPath);
+	SCANLIB_API HRESULT ScanFile(const wchar_t* lpwszPath, wchar_t** ppGuid, long* pnOffset);
+	SCANLIB_API HRESULT ScanArray(const unsigned char* lpArray, const unsigned long nLength, wchar_t** ppGuid, long* pnOffset);
+	SCANLIB_API HRESULT LoadSignatures(const wchar_t* lpwszPath);
+}

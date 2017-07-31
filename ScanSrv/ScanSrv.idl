@@ -1,0 +1,38 @@
+// ScanSrv.idl : IDL source for ScanSrv
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (ScanSrv.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(16BA5B1A-00DB-411D-82C8-18C2C75869C9),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IScanner : IDispatch{
+	[id(1)] HRESULT ScanFile([in] BSTR lpwszPath, [out] long* lOffset, [out] BSTR* lpwszGUID);
+	[id(2)] HRESULT ScanArray([in] VARIANT pData, [out] long* lOffset, [out] BSTR* lpwszGUID);
+	[id(3)] HRESULT LoadSignatures([in] BSTR lpwszPath);
+};
+[
+	uuid(198CCB41-C115-45D5-9359-440B19E36C85),
+	version(1.0),
+]
+library ScanSrvLib
+{
+	importlib("stdole2.tlb");
+
+	[
+		uuid(B596F2BC-DF22-40A9-A44C-8C8210B1F6C8)		
+	]
+	coclass Scanner
+	{
+		[default] interface IScanner;
+	};
+};
+

@@ -1,27 +1,36 @@
 #include "stdafx.h"
-#include "FilesScanner.h"
-#include "../scanlib/scanlib.h"
-#include "../include/MalwareDefs.h"
+#include <atlsafe.h>
+#include <atlcomcli.h>
+
+#include "ComFilesScanner.h"
 
 
-CFilesScanner::CFilesScanner(int nThreads, std::shared_ptr<CFilesQueue> pQueue, CLogger* pLogger)
+CComFilesScanner::CComFilesScanner(int nThreads, std::shared_ptr<CFilesQueue> pQueue, CLogger* pLogger, const wchar_t* lpwszPathSign)
 	:m_pQueue(pQueue)
-	,m_pLogger(pLogger)
-	,m_bStop(false)
+	, m_pLogger(pLogger)
+	, m_bStop(false)
 {
+	CoInitializeEx(NULL, COINIT_MULTITHREADED);
+
+	auto hr = m_pScanner.CoCreateInstance(__uuidof(Scanner));
+
+	if (hr != S_OK)
+		m_pScanner = nullptr;
+
+	hr = m_pScanner->LoadSignatures(lpwszPathSign);
+
 	for (auto i = 0; i < nThreads; ++i)
 	{
-		m_vThreads.push_back(std::thread(&CFilesScanner::threadFunc, this, i));
+		m_vThreads.push_back(std::thread(&CComFilesScanner::threadFunc, this, i));
 	}
 }
 
-
-CFilesScanner::~CFilesScanner()
+CComFilesScanner::~CComFilesScanner()
 {
-	
+	CoUninitialize();
 }
 
-void CFilesScanner::Stop()
+void CComFilesScanner::Stop()
 {
 	m_bStop = true;
 
@@ -32,7 +41,7 @@ void CFilesScanner::Stop()
 	}
 }
 
-void CFilesScanner::threadFunc(int i)
+void CComFilesScanner::threadFunc(int i)
 {
 	while (!m_bStop)
 	{
@@ -44,11 +53,11 @@ void CFilesScanner::threadFunc(int i)
 			msg.Append(L"scan file ");
 			msg.Append(f);
 			msg.Append(L"...");
-			
+
 			wchar_t* pGuid;
 			long nOffset = 0;
 
-			auto res = scandll::ScanFile(f, &pGuid, &nOffset);
+			auto res = m_pScanner->ScanFile(f.GetString(), &nOffset, &pGuid);
 
 			if (res == S_OK)
 			{
@@ -62,7 +71,6 @@ void CFilesScanner::threadFunc(int i)
 					msg.Append(L"infected\n");
 					msg.AppendFormat(L"offset: %d, malware : %s", nOffset, pGuid);
 					m_pLogger->Error(msg);
-					delete[] pGuid;
 				}
 			}
 			else
@@ -73,3 +81,4 @@ void CFilesScanner::threadFunc(int i)
 		}
 	}
 }
+

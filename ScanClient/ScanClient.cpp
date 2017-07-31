@@ -6,19 +6,30 @@
 #include "../scanlib/scanlib.h"
 #include "DirReader.h"
 #include "FilesScanner.h"
+#include "ComFilesScanner.h"
 #include "../include/MalwareDefs.h"
 
 int GetProcCnt();
 
-int main()
+int wmain(int argc, wchar_t *argv[])
 {
 	auto pLogger = CreateConsoleLogger();
 
+	if (argc < 3)
+	{
+		pLogger->Info(L"Usage : ");
+		pLogger->Info(L"ScanClient <pathToSignaryFile> <pathToScan>");
+		return 0;
+	}
+
 	auto pQueue = std::shared_ptr<CFilesQueue>(new CFilesQueue());
 	auto pReader = CAutoPtr<CDirReader>(new CDirReader(pQueue));
-	pReader->ReadDir(L"C:\\MyProjects\\DELETE\\Comodo\\");
+	pReader->ReadDir(argv[1]);
 
-	CFilesScanner filesScanner(GetProcCnt(), pQueue, pLogger);
+	/*LoadSignatures(L"db.txt");
+	CFilesScanner filesScanner(GetProcCnt(), pQueue, pLogger);*/
+
+	CComFilesScanner filesScanner(GetProcCnt(), pQueue, pLogger, argv[2]);
 
 	HANDLE hFake = ::CreateEvent(NULL, TRUE, FALSE, NULL);
 	while (pQueue->Empty() == false)
@@ -28,9 +39,8 @@ int main()
 	}
 	::CloseHandle(hFake);
 
-	filesScanner.Stop();
 	pQueue->Stop();
-
+	filesScanner.Stop();		
 
 	_CrtDumpMemoryLeaks();
 

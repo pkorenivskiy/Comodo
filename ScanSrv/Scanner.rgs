@@ -1,0 +1,26 @@
+HKCR
+{
+	Comodo.Scanner.1 = s 'Scanner Class'
+	{
+		CLSID = s '{B596F2BC-DF22-40A9-A44C-8C8210B1F6C8}'
+	}
+	Comodo.Scanner = s 'Scanner Class'
+	{		
+		CurVer = s 'Comodo.Scanner.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {B596F2BC-DF22-40A9-A44C-8C8210B1F6C8} = s 'Scanner Class'
+		{
+			ProgID = s 'Comodo.Scanner.1'
+			VersionIndependentProgID = s 'Comodo.Scanner'
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			TypeLib = s '{198CCB41-C115-45D5-9359-440B19E36C85}'
+			Version = s '1.0'
+		}
+	}
+}

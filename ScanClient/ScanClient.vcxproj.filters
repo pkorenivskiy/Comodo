@@ -33,6 +33,9 @@
     <ClInclude Include="FilesScanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ComFilesScanner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -50,5 +53,12 @@
     <ClCompile Include="FilesScanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ComFilesScanner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scansrv.tlh" />
+    <None Include="scansrv.tli" />
   </ItemGroup>
 </Project>
